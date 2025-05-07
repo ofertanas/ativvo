@@ -1,66 +1,679 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Promoção Razer Viper Mini</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
-      text-align: center;
-    }
-    .highlight {
-      color: #00ff88;
-      font-weight: bold;
-    }
-    img {
-      width: 100%;
-      max-width: 400px;
-      border-radius: 12px;
-      margin: 20px 0;
-    }
-    .price {
-      font-size: 2em;
-      color: #00ff88;
-    }
-    .cta {
-      background: #00ff88;
-      color: #111;
-      padding: 15px 25px;
-      border: none;
-      font-size: 1.2em;
-      border-radius: 8px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 20px;
-    }
-    .cta:hover {
-      background: #00e076;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Empresarial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed {
+            width: 80px;
+        }
+        .sidebar.collapsed .sidebar-text {
+            display: none;
+        }
+        .sidebar.collapsed .sidebar-icon {
+            margin-right: 0;
+        }
+        .sidebar-toggle {
+            transition: all 0.3s ease;
+        }
+        .sidebar.collapsed .sidebar-toggle {
+            transform: rotate(180deg);
+        }
+        .card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+    </style>
 </head>
-<body>
-  <div class="container">
-    <h1>🔥 Promoção Exclusiva: <span class="highlight">Razer Viper Mini</span></h1>
-    <p>Super leve, preciso e ideal para jogos FPS. Aproveite esta oferta por tempo limitado!</p>
-    <img src="/mnt/data/A_promotional_digital_advertisement_photograph_sho.png" alt="Razer Viper Mini">
-    <p class="price">R$ 249,90</p>
-    <p>Parcele em até 3x no cartão (taxa do comprador)</p>
-    <p>📦 Envio rápido e seguro para todo o Brasil</p>
-    <p>✅ Produto novo, lacrado e com garantia</p>
+<body class="bg-gray-50 font-sans">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="sidebar bg-indigo-800 text-white w-64 flex flex-col transition-all duration-300 ease-in-out">
+            <div class="p-4 flex items-center justify-between border-b border-indigo-700">
+                <div class="flex items-center">
+                    <i class="fas fa-chart-line text-2xl sidebar-icon"></i>
+                    <span class="ml-3 text-xl font-bold sidebar-text">Business Dashboard</span>
+                </div>
+                <button id="sidebarToggle" class="sidebar-toggle text-white focus:outline-none">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            <nav class="flex-1 overflow-y-auto">
+                <ul class="py-4">
+                    <li>
+                        <a href="#" data-tab="importacoes" class="tab-link flex items-center px-6 py-3 hover:bg-indigo-700 transition-colors duration-200">
+                            <i class="fas fa-box-open sidebar-icon"></i>
+                            <span class="ml-3 sidebar-text">Importações</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-tab="ativvo" class="tab-link flex items-center px-6 py-3 hover:bg-indigo-700 transition-colors duration-200">
+                            <i class="fas fa-dumbbell sidebar-icon"></i>
+                            <span class="ml-3 sidebar-text">Ativvo</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-tab="tarefas" class="tab-link flex items-center px-6 py-3 hover:bg-indigo-700 transition-colors duration-200">
+                            <i class="fas fa-tasks sidebar-icon"></i>
+                            <span class="ml-3 sidebar-text">Tarefas</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-tab="lucros" class="tab-link flex items-center px-6 py-3 hover:bg-indigo-700 transition-colors duration-200">
+                            <i class="fas fa-chart-pie sidebar-icon"></i>
+                            <span class="ml-3 sidebar-text">Lucros</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-tab="spotify" class="tab-link flex items-center px-6 py-3 hover:bg-indigo-700 transition-colors duration-200">
+                            <i class="fab fa-spotify sidebar-icon"></i>
+                            <span class="ml-3 sidebar-text">Spotify</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="p-4 border-t border-indigo-700">
+                <div class="flex items-center">
+                    <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="User" class="w-10 h-10 rounded-full">
+                    <div class="ml-3 sidebar-text">
+                        <div class="font-medium">Diogo</div>
+                        <div class="text-xs text-indigo-300">Administrador</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <a class="cta" href="https://wa.me/73991177267?text=Tenho%20interesse%20no%20Razer%20Viper%20Mini" target="_blank">
-      GARANTIR MEU MOUSE AGORA
-    </a>
-  </div>
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <!-- Header -->
+            <header class="bg-white shadow-sm">
+                <div class="px-6 py-4 flex items-center justify-between">
+                    <h1 class="text-2xl font-bold text-gray-800" id="currentTabTitle">Dashboard</h1>
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <input type="text" placeholder="Pesquisar..." class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        </div>
+                        <button class="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Tab Contents -->
+            <main class="p-6">
+                <!-- Importações Tab -->
+                <div id="importacoes" class="tab-content">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">📦 Gestão de Importações</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white rounded-lg shadow p-6 card">
+                                <h3 class="text-lg font-medium mb-4">Adicionar Produto</h3>
+                                <form id="produtoForm" class="space-y-4">
+                                    <div>
+                                        <label for="produto" class="block text-sm font-medium text-gray-700">Produto</label>
+                                        <input type="text" id="produto" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="custo" class="block text-sm font-medium text-gray-700">Custo (R$)</label>
+                                            <input type="number" id="custo" step="0.01" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+                                        <div>
+                                            <label for="venda" class="block text-sm font-medium text-gray-700">Venda (R$)</label>
+                                            <input type="number" id="venda" step="0.01" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Status</label>
+                                        <div class="mt-2 space-x-4">
+                                            <label class="inline-flex items-center">
+                                                <input type="radio" name="status" value="Estoque" checked class="h-4 w-4 text-indigo-600 focus:ring-indigo-500">
+                                                <span class="ml-2 text-sm text-gray-700">Estoque</span>
+                                            </label>
+                                            <label class="inline-flex items-center">
+                                                <input type="radio" name="status" value="Anunciado" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500">
+                                                <span class="ml-2 text-sm text-gray-700">Anunciado</span>
+                                            </label>
+                                            <label class="inline-flex items-center">
+                                                <input type="radio" name="status" value="Vendido" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500">
+                                                <span class="ml-2 text-sm text-gray-700">Vendido</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                        Adicionar Produto
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="bg-white rounded-lg shadow overflow-hidden card">
+                                <div class="p-6">
+                                    <h3 class="text-lg font-medium mb-4">Produtos Cadastrados</h3>
+                                    <div class="overflow-x-auto">
+                                        <table id="produtosTable" class="min-w-full divide-y divide-gray-200">
+                                            <thead class="bg-gray-50">
+                                                <tr>
+                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produto</th>
+                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Custo</th>
+                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Venda</th>
+                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lucro</th>
+                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200" id="produtosBody">
+                                                <!-- Produtos serão adicionados aqui via JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ativvo Tab -->
+                <div id="ativvo" class="tab-content">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">🏋️ Registro de Vendas - Ativvo</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white rounded-lg shadow p-6 card">
+                                <h3 class="text-lg font-medium mb-4">Registrar Venda</h3>
+                                <form id="vendaForm" class="space-y-4">
+                                    <div>
+                                        <label for="conta" class="block text-sm font-medium text-gray-700">Conta</label>
+                                        <select id="conta" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                            <option value="Conta Principal">cassiaritainnocente@gmail.com/#Fitpass29</option>
+                                            <option value="Conta Secundária">edinaldotenoriorita@gmail.com/#Fitpass29</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="cliente" class="block text-sm font-medium text-gray-700">Cliente</label>
+                                        <input type="text" id="cliente" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label for="plano" class="block text-sm font-medium text-gray-700">Plano</label>
+                                        <select id="plano" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                            <option value="Único">Único</option>
+                                           
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="valor" class="block text-sm font-medium text-gray-700">Valor (R$)</label>
+                                        <input type="number" id="valor" step="0.01" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label for="data" class="block text-sm font-medium text-gray-700">Data (ex: 06/05/2025)</label>
+                                        <input type="text" id="data" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                        Registrar Venda
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="bg-white rounded-lg shadow overflow-hidden card">
+                                <div class="p-6">
+                                    <h3 class="text-lg font-medium mb-4">Vendas Registradas</h3>
+                                    <div class="overflow-x-auto">
+                                        <table id="vendasTable" class="min-w-full divide-y divide-gray-200">
+                                            <thead class="bg-gray-50">
+                                                <tr>
+                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conta</th>
+                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plano</th>
+                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200" id="vendasBody">
+                                                <!-- Vendas serão adicionadas aqui via JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarefas Tab -->
+                <div id="tarefas" class="tab-content">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">📝 Lista de Tarefas</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white rounded-lg shadow p-6 card">
+                                <h3 class="text-lg font-medium mb-4">Adicionar Tarefa</h3>
+                                <form id="tarefaForm" class="space-y-4">
+                                    <div>
+                                        <label for="tarefa" class="block text-sm font-medium text-gray-700">Nova Tarefa</label>
+                                        <input type="text" id="tarefa" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                        Adicionar Tarefa
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="bg-white rounded-lg shadow p-6 card">
+                                <h3 class="text-lg font-medium mb-4">Lista de Tarefas</h3>
+                                <div class="space-y-3" id="tarefasList">
+                                    <!-- Tarefas serão adicionadas aqui via JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lucros Tab -->
+                <div id="lucros" class="tab-content">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">📈 Análise de Lucros</h2>
+                        <div class="grid grid-cols-1 gap-6">
+                            <div class="bg-white rounded-lg shadow p-6 card">
+                                <h3 class="text-lg font-medium mb-4">Resumo de Lucros</h3>
+                                <div id="resumoLucro" class="text-xl font-bold text-indigo-600 mb-6">
+                                    <!-- Resumo será atualizado aqui via JavaScript -->
+                                </div>
+                                <div id="graficoLucro" class="w-full h-96">
+                                    <!-- Gráfico será renderizado aqui via JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spotify Tab -->
+                <div id="spotify" class="tab-content">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">🎧 Player Spotify</h2>
+                        <div class="grid grid-cols-1 gap-6">
+                            <div class="bg-white rounded-lg shadow p-6 card">
+                                <h3 class="text-lg font-medium mb-4">Reproduzir Playlist</h3>
+                                <form id="spotifyForm" class="space-y-4">
+                                    <div>
+                                        <label for="spotifyUrl" class="block text-sm font-medium text-gray-700">URL da Playlist Spotify</label>
+                                        <input type="text" id="spotifyUrl" placeholder="https://open.spotify.com/playlist/..." class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                        Carregar Playlist
+                                    </button>
+                                </form>
+                                <div id="spotifyPlayer" class="mt-6">
+                                    <!-- Player será inserido aqui via JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Dados em memória
+        let produtos_importacao = [];
+        let ativvo_vendas = [];
+        let tarefas = [];
+
+        // Elementos DOM
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const tabLinks = document.querySelectorAll('.tab-link');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const currentTabTitle = document.getElementById('currentTabTitle');
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sidebar toggle
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+            });
+
+            // Tab navigation
+            tabLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Atualizar título
+                    const tabName = this.querySelector('.sidebar-text').textContent;
+                    currentTabTitle.textContent = tabName;
+                    
+                    // Mostrar tab selecionada
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    // Atualizar gráfico quando a tab de lucros for aberta
+                    if (tabId === 'lucros') {
+                        atualizarGraficoLucro();
+                    }
+                });
+            });
+
+            // Ativar primeira tab por padrão
+            tabLinks[0].click();
+
+            // Formulários
+            document.getElementById('produtoForm').addEventListener('submit', adicionarProduto);
+            document.getElementById('vendaForm').addEventListener('submit', registrarVenda);
+            document.getElementById('tarefaForm').addEventListener('submit', adicionarTarefa);
+            document.getElementById('spotifyForm').addEventListener('submit', carregarSpotify);
+        });
+
+        // Funções para adicionar dados
+        function adicionarProduto(e) {
+            e.preventDefault();
+            
+            const produto = document.getElementById('produto').value;
+            const custo = parseFloat(document.getElementById('custo').value);
+            const venda = parseFloat(document.getElementById('venda').value);
+            const status = document.querySelector('input[name="status"]:checked').value;
+            const lucro = venda - custo;
+            
+            produtos_importacao.push({
+                produto,
+                custo,
+                venda,
+                lucro,
+                status
+            });
+            
+            // Limpar formulário
+            document.getElementById('produtoForm').reset();
+            
+            // Atualizar tabela
+            atualizarTabelaProdutos();
+            
+            // Feedback visual
+            showToast('Produto adicionado com sucesso!', 'success');
+        }
+
+        function registrarVenda(e) {
+            e.preventDefault();
+            
+            const conta = document.getElementById('conta').value;
+            const cliente = document.getElementById('cliente').value;
+            const plano = document.getElementById('plano').value;
+            const valor = parseFloat(document.getElementById('valor').value);
+            const data = document.getElementById('data').value;
+            
+            ativvo_vendas.push({
+                conta,
+                cliente,
+                plano,
+                valor,
+                data
+            });
+            
+            // Limpar formulário
+            document.getElementById('vendaForm').reset();
+            
+            // Atualizar tabela
+            atualizarTabelaVendas();
+            
+            // Feedback visual
+            showToast('Venda registrada com sucesso!', 'success');
+        }
+
+        function adicionarTarefa(e) {
+            e.preventDefault();
+            
+            const tarefa = document.getElementById('tarefa').value;
+            
+            if (tarefa.trim() !== '') {
+                tarefas.push(tarefa);
+                
+                // Limpar formulário
+                document.getElementById('tarefa').value = '';
+                
+                // Atualizar lista
+                atualizarListaTarefas();
+                
+                // Feedback visual
+                showToast('Tarefa adicionada!', 'success');
+            }
+        }
+
+        function carregarSpotify(e) {
+            e.preventDefault();
+            
+            const url = document.getElementById('spotifyUrl').value;
+            const playerContainer = document.getElementById('spotifyPlayer');
+            
+            if (url.includes('open.spotify.com') && url.includes('playlist')) {
+                const parts = url.split('/');
+                const playlistId = parts[parts.indexOf('playlist') + 1].split('?')[0];
+                
+                const iframe = `
+                    <iframe style="border-radius:12px" 
+                            src="https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator" 
+                            width="100%" 
+                            height="380" 
+                            frameborder="0" 
+                            allowfullscreen="" 
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                            loading="lazy"></iframe>
+                `;
+                
+                playerContainer.innerHTML = iframe;
+                showToast('Playlist carregada com sucesso!', 'success');
+            } else {
+                playerContainer.innerHTML = '<p class="text-red-500">URL inválida. Use um link de playlist do Spotify.</p>';
+                showToast('URL inválida!', 'error');
+            }
+        }
+
+        // Funções para atualizar visualizações
+        function atualizarTabelaProdutos() {
+            const tbody = document.getElementById('produtosBody');
+            tbody.innerHTML = '';
+            
+            produtos_importacao.forEach(produto => {
+                const row = document.createElement('tr');
+                
+                // Determinar cor do status
+                let statusClass = '';
+                if (produto.status === 'Estoque') statusClass = 'bg-blue-100 text-blue-800';
+                else if (produto.status === 'Anunciado') statusClass = 'bg-yellow-100 text-yellow-800';
+                else if (produto.status === 'Vendido') statusClass = 'bg-green-100 text-green-800';
+                
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${produto.produto}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R$ ${produto.custo.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R$ ${produto.venda.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm ${produto.lucro >= 0 ? 'text-green-600' : 'text-red-600'}">R$ ${produto.lucro.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
+                            ${produto.status}
+                        </span>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function atualizarTabelaVendas() {
+            const tbody = document.getElementById('vendasBody');
+            tbody.innerHTML = '';
+            
+            ativvo_vendas.forEach(venda => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${venda.conta}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${venda.cliente}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${venda.plano}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R$ ${venda.valor.toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${venda.data}</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function atualizarListaTarefas() {
+            const container = document.getElementById('tarefasList');
+            container.innerHTML = '';
+            
+            if (tarefas.length === 0) {
+                container.innerHTML = '<p class="text-gray-500">Nenhuma tarefa cadastrada.</p>';
+                return;
+            }
+            
+            tarefas.forEach((tarefa, index) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-start';
+                
+                div.innerHTML = `
+                    <div class="flex items-center h-5">
+                        <input id="tarefa-${index}" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                    </div>
+                    <div class="ml-3 text-sm">
+                        <label for="tarefa-${index}" class="font-medium text-gray-700">${tarefa}</label>
+                    </div>
+                    <button class="ml-auto text-red-500 hover:text-red-700" onclick="removerTarefa(${index})">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+
+        function atualizarGraficoLucro() {
+            const resumoContainer = document.getElementById('resumoLucro');
+            const graficoContainer = document.getElementById('graficoLucro');
+            
+            if (produtos_importacao.length === 0) {
+                resumoContainer.textContent = 'Nenhum dado de lucro disponível.';
+                graficoContainer.innerHTML = '<p class="text-gray-500">Adicione produtos para visualizar o gráfico de lucros.</p>';
+                return;
+            }
+            
+            // Calcular lucro total
+            const totalLucro = produtos_importacao.reduce((sum, produto) => sum + produto.lucro, 0);
+            resumoContainer.textContent = `Lucro total acumulado: R$ ${totalLucro.toFixed(2)}`;
+            
+            // Preparar dados para o gráfico
+            const produtos = produtos_importacao.map(p => p.produto);
+            const lucros = produtos_importacao.map(p => p.lucro);
+            const status = produtos_importacao.map(p => p.status);
+            
+            // Cores baseadas no status
+            const cores = status.map(s => {
+                if (s === 'Estoque') return '#3b82f6'; // azul
+                if (s === 'Anunciado') return '#f59e0b'; // amarelo
+                if (s === 'Vendido') return '#10b981'; // verde
+                return '#6b7280'; // cinza
+            });
+            
+            // Criar gráfico com Plotly
+            const trace = {
+                x: produtos,
+                y: lucros,
+                type: 'bar',
+                marker: {
+                    color: cores
+                }
+            };
+            
+            const layout = {
+                title: 'Lucro por Produto',
+                xaxis: {
+                    title: 'Produto'
+                },
+                yaxis: {
+                    title: 'Lucro (R$)'
+                }
+            };
+            
+            Plotly.newPlot(graficoContainer, [trace], layout);
+        }
+
+        // Funções auxiliares
+        function removerTarefa(index) {
+            tarefas.splice(index, 1);
+            atualizarListaTarefas();
+            showToast('Tarefa removida!', 'info');
+        }
+
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            let bgColor = 'bg-indigo-600';
+            
+            if (type === 'error') bgColor = 'bg-red-600';
+            else if (type === 'info') bgColor = 'bg-blue-600';
+            else if (type === 'success') bgColor = 'bg-green-600';
+            
+            toast.className = `fixed bottom-4 right-4 ${bgColor} text-white px-4 py-2 rounded-md shadow-lg flex items-center`;
+            
+            let icon = '';
+            if (type === 'error') icon = '<i class="fas fa-exclamation-circle mr-2"></i>';
+            else if (type === 'info') icon = '<i class="fas fa-info-circle mr-2"></i>';
+            else if (type === 'success') icon = '<i class="fas fa-check-circle mr-2"></i>';
+            
+            toast.innerHTML = `${icon}${message}`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Adicionar alguns dados de exemplo
+        function adicionarDadosExemplo() {
+            // Produtos de exemplo
+            produtos_importacao = [
+                { produto: 'Smartphone', custo: 1200, venda: 1800, lucro: 600, status: 'Vendido' },
+                { produto: 'Notebook', custo: 2500, venda: 3200, lucro: 700, status: 'Anunciado' },
+                { produto: 'Fones de Ouvido', custo: 150, venda: 300, lucro: 150, status: 'Estoque' }
+            ];
+            
+            // Vendas de exemplo
+            ativvo_vendas = [
+                { conta: 'cassiaritainnocente@gmail.com/#Fitpass29', cliente: 'João Silva', plano: 'Anual', valor: 1200, data: '15/05/2023' },
+                { conta: 'Conta Secundária', cliente: 'Maria Souza', plano: 'Mensal', valor: 150, data: '20/05/2023' }
+            ];
+            
+            // Tarefas de exemplo
+            tarefas = [
+                'Revisar estoque',
+                'Atualizar planilha de vendas',
+                'Enviar relatório mensal'
+            ];
+            
+            // Atualizar visualizações
+            atualizarTabelaProdutos();
+            atualizarTabelaVendas();
+            atualizarListaTarefas();
+        }
+
+        // Descomente a linha abaixo para adicionar dados de exemplo ao carregar a página
+        // adicionarDadosExemplo();
+    </script>
 </body>
 </html>
