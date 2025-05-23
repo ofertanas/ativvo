@@ -844,7 +844,71 @@ body.elementor-page .elementor-widget-menu-anchor{margin-bottom:0}</style>		<div
 				
 									<p class="elementor-icon-box-description">
 						Ative o desejo oculto da mulher por você, fazendo sexo intenso até ela chegar ao orgasmo.					</p>
-				
+<script type="rocketlazyloadscript">
+    // right-top, right-bottom, left-top, left-bottom, center-top, center-bottom, center-center
+    var position = "left-bottom";
+
+    // verde, azul, vermelho, amarelo
+    var color = "verde";
+
+    // fade, zoom, from-right, from-left, from-top, from-bottom
+    var animation = "from-left";
+
+    // nome do produto
+    var product_name = "<strong></strong>";
+
+    // frase depois do nome da pessoa
+    var phrase = "acabou de comprar";
+    var timeout = 4000;
+
+    // masc, fem, any
+    var type_name = "fem";
+    var msg_final = "";
+
+    var min_time = 4;
+    var max_time = 20;
+
+    var names_fem = ['Jessica', 'Amanda', 'Jennifer', 'Ashley', 'Sarah', 'Stephanie', 'Nicole', 'Heather', 'Elizabeth', 'Megan', 'Melissa', 'Michelle', 'Kimberly', 'Lisa', 'Angela', 'Heather', 'Rebecca', 'Laura', 'Christina', 'Rachel', 'Caroline', 'Emily', 'Samantha', 'Kelly', 'Natalie'];
+
+    var option = {
+        position: position,
+        cssAnimationStyle: animation,
+        plainText: false,
+        timeout: timeout
+    };
+
+    function show_notification() {
+        if (type_name == "fem") {
+            msg_final = "<strong>" + names_fem[Math.floor(Math.random() * names_fem.length)] + "</strong>";
+        } else {
+            // A linha abaixo é para garantir que sempre será selecionado um nome feminino,
+            // já que os masculinos foram removidos.
+            msg_final = "<strong>" + names_fem[Math.floor(Math.random() * names_fem.length)] + "</strong>";
+        }
+
+        msg_final += decodeURIComponent(escape(" " + phrase + " " + product_name));
+
+        if (color == "verde") {
+            Notiflix.Notify.Success(msg_final, option);
+        }
+
+        if (color == "azul") {
+            Notiflix.Notify.Info(msg_final, option);
+        }
+
+        if (color == "vermelho") {
+            Notiflix.Notify.Failure(msg_final, option);
+        }
+
+        if (color == "amarelo") {
+            Notiflix.Notify.Warning(msg_final, option);
+        }
+
+        var rand = Math.floor(Math.random() * (max_time - min_time + 1) + min_time);
+        setTimeout(show_notification, rand * 2000);
+    }
+    setTimeout(show_notification, 4 * 2000);
+</script>				
 			</div>
 			
 		</div>
